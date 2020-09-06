@@ -6,6 +6,9 @@ const {Requests} = require('./models/Requests');
 const {saveRequestedTxs} = require('./modules/saveRequestedTx');
 const {saveExecutedTxs} = require('./modules/saveExecutedTx');
 const {executeRequestedTxs} = require('./modules/executeRequestedTxs');
+const HDWalletProvider = require('truffle-hdwallet-provider');
+const infuraProjectId = process.env.INFURA_PROJECT_ID;
+const mnemonic = fs.readFileSync(".secret").toString().trim();
 
 
 // Connect tod atabase
