@@ -95,7 +95,7 @@ contract Aion {
     
     constructor () public {
         owner = msg.sender;
-        serviceFee = 500000000000000;
+        serviceFee = 0;
     }    
 
     // This function allows to change the address of the owner (admin of the contract)
