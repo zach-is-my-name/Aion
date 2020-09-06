@@ -7,25 +7,17 @@ const {saveRequestedTxs} = require('./modules/saveRequestedTx');
 const {saveExecutedTxs} = require('./modules/saveExecutedTx');
 const {executeRequestedTxs} = require('./modules/executeRequestedTxs');
 const HDWalletProvider = require('truffle-hdwallet-provider');
-const infuraProjectId = process.env.INFURA_PROJECT_ID;
-const mnemonic = fs.readFileSync(".secret").toString().trim();
 
 
 // Connect tod atabase
-mongoose.connect(process.env.aionExecutor_dbHost, {useNewUrlParser: true })
+mongoose.connect(process.env.aionExecutor_dbHost, {useNewUrlParser: true, useUnifiedTopology: true})
     .then( ()=> console.log('Connected to aion executor database'))
     .catch( (err) => console.error('Could not connect to database', error));
 
 
 // Inject Web3
-var web3 = new Web3(new Web3.providers.HttpProvider(process.env.aionExecutor_httpProvider),null,{
-    defaultBlock: 'latest',
-    defaultGas: 20000,
-    defaultGasPrice: 1,
-    transactionBlockTimeout: 50,
-    transactionConfirmationBlocks: 12,
-    transactionPollingTimeout: 480,
-});
+var provider = new HDWalletProvider(process.env.aionExecutor_mnemonic, `https://ropsten.infura.io/v3/` + process.env.aionExecutor_infuraId, 9, 10)
+var web3 = new Web3(provider);
 
 
 
