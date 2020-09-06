@@ -3,7 +3,7 @@ const SafeMath = artifacts.require("SafeMath")
 const AionClient = artifacts.require("AionClient")
 module.exports = function(deployer) {
   deployer.deploy(SafeMath);
-  deployer.deploy(Aion).then(
-    return deployer.deploy(AionClient, Aion.address));
+  deployer.deploy(Aion).then(function() {
+    return deployer.deploy(AionClient, Aion.address)});
   };
 
