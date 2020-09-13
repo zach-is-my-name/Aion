@@ -8,24 +8,29 @@ const {saveExecutedTxs} = require('./modules/saveExecutedTx');
 const {executeRequestedTxs} = require('./modules/executeRequestedTxs');
 const HDWalletProvider = require('truffle-hdwallet-provider');
 
-
+const dbHost = process.env.aionExecutor_dbHost
+const mnemonic =  process.env.aionExecutor_mnemonic
+const infuraId = process.env.aionExecutor_infuraId 
+const aionContractAddress = process.env.aionExecutor_aionContractAddress
+const privateKey = process.env.aionExecutor_privateKey
+const reqConfirmations = 1
 // Connect tod atabase
-mongoose.connect(process.env.aionExecutor_dbHost, {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(dbHost, {useNewUrlParser: true, useUnifiedTopology: true})
     .then( ()=> console.log('Connected to aion executor database'))
     .catch( (err) => console.error('Could not connect to database', error));
 
 
 // Inject Web3
-var provider = new HDWalletProvider(process.env.aionExecutor_mnemonic, `https://ropsten.infura.io/v3/` + process.env.aionExecutor_infuraId, 9, 10)
+var provider = new HDWalletProvider(mnemonic, `https://ropsten.infura.io/v3/` + infuraId, 9, 10)
 var web3 = new Web3(provider);
 
 
 
 // Contract definition and account setting
 const ABI = JSON.parse(fs.readFileSync('Aion_ABI.json'));
-const aionContract = new web3.eth.Contract(ABI, process.env.aionExecutor_aionContractAddress)
-const account = web3.eth.accounts.privateKeyToAccount(process.env.aionExecutor_privateKey);
-const reqConfirmations = process.env.aionExecutor_reqConfirmations;
+const aionContract = new web3.eth.Contract(ABI, aionContractAddress)
+const account = web3.eth.accounts.privateKeyToAccount(privateKey);
+const reqConfirmations = reqConfirmations;
 
 // Global variables
 var currentBlock = 0;
