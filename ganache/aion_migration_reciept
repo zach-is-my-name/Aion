@@ -1,0 +1,98 @@
+zmg@zmg-acer:~/AionGoalZapp/migrations$ truffle migrate --network teams
+
+Compiling your contracts...
+===========================
+> Everything is up to date, there is nothing to compile.
+
+
+
+Starting migrations...
+======================
+> Network name:    'teams'
+> Network id:      1600456372095
+> Block gas limit: 10000000 (0x989680)
+
+
+1_initial_migration.js
+======================
+
+   Deploying 'Migrations'
+   ----------------------
+   > transaction hash:    0xe4aa1b4399ee133d16ac6f88dfd47908bd48c1c6e5c9bfe0722361313a314dee
+   > Blocks: 0            Seconds: 0
+   > contract address:    0x79E86F0Bb80cEb22A2D8bC60f3911Dd636C84A77
+   > block number:        1
+   > block timestamp:     1600457567
+   > account:             0x8598279dbd968035b0e9D136571CF66ee8d14611
+   > balance:             99.99592882
+   > gas used:            203559 (0x31b27)
+   > gas price:           20 gwei
+   > value sent:          0 ETH
+   > total cost:          0.00407118 ETH
+
+
+   > Saving migration to chain.
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:          0.00407118 ETH
+
+
+2_Aion_Migration.js
+===================
+
+   Deploying 'SafeMath'
+   --------------------
+   > transaction hash:    0x5390003cde84ef693c91ca1419e5e44c4feec754cdf08c18edae86efd8ef28e0
+   > Blocks: 0            Seconds: 0
+   > contract address:    0x6b4815adf2d3B134Ae97fF6213f2db84Ed29A0c5
+   > block number:        3
+   > block timestamp:     1600457573
+   > account:             0xd2716672B231D87B496eE1d185eED6CBA6f359a6
+   > balance:             99.99860176
+   > gas used:            69912 (0x11118)
+   > gas price:           20 gwei
+   > value sent:          0 ETH
+   > total cost:          0.00139824 ETH
+
+
+   Deploying 'Aion'
+   ----------------
+   > transaction hash:    0xdec10a1061e64de6840ec92c3a998be9d1b3a4dd76ad95f62dd064a50022f7b9
+   > Blocks: 0            Seconds: 0
+   > contract address:    0x51F5d84603dafa279Ae35596EBAFcC6CEd2B5628
+   > block number:        4
+   > block timestamp:     1600457575
+   > account:             0xd2716672B231D87B496eE1d185eED6CBA6f359a6
+   > balance:             99.96602404
+   > gas used:            1628886 (0x18dad6)
+   > gas price:           20 gwei
+   > value sent:          0 ETH
+   > total cost:          0.03257772 ETH
+
+
+   Deploying 'AionClient'
+   ----------------------
+   > transaction hash:    0x427f81bd69ce58683cc4967530b1554855fb51d01e8fe7bb43bb2ee111b04760
+   > Blocks: 0            Seconds: 0
+   > contract address:    0xd154b4BbcFC440D1Ae8d0fcC97A4945b05ffE9cc
+   > block number:        5
+   > block timestamp:     1600457578
+   > account:             0xd2716672B231D87B496eE1d185eED6CBA6f359a6
+   > balance:             99.96271304
+   > gas used:            165550 (0x286ae)
+   > gas price:           20 gwei
+   > value sent:          0 ETH
+   > total cost:          0.003311 ETH
+
+
+   > Saving migration to chain.
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:          0.03728696 ETH
+
+
+Summary
+=======
+> Total deployments:   4
+> Final cost:          0.04135814 ETH
+

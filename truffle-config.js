@@ -1,6 +1,9 @@
 require('dotenv').config()
 const HDWalletProvider = require('truffle-hdwallet-provider');
 const infuraProjectId = process.env.INFURA_PROJECT_ID;
+const teamsMnemonic = "program perfect side school genuine volcano normal upper loyal enroll radio sound";
+
+
 /**
  * Use this file to configure your truffle project. It's seeded with some
  * common settings for different networks and features like migrations,
@@ -9,7 +12,7 @@ const infuraProjectId = process.env.INFURA_PROJECT_ID;
  *
  * More information about configuration can be found at:
  *
- * truffleframework.com/docs/advanced/configuration
+ * trufflesuite.com/docs/advanced/configuration
  *
  * To deploy via Infura you'll need a wallet provider (like @truffle/hdwallet-provider)
  * to sign your transactions before they're sent to a remote public node. Infura accounts
@@ -44,12 +47,18 @@ module.exports = {
     // You should run a client (like ganache-cli, geth or parity) in a separate terminal
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
     // options below to some value.
+    teams: {
+      provider: function() {
+        return new HDWalletProvider(teamsMnemonic, "https://sandbox.truffleteams.com/de77b065-c9a7-4c8b-9fe9-0e507a623f9a", 0, 10, false);
+      },
+      network_id: 1600456372095
+    },
     //
-     development: {
-      host: "127.0.0.1",     // Localhost (default: none)
-      port: 8545,            // Standard Ethereum port (default: none)
-      network_id: "*",       // Any network (default: none)
-     },
+    // development: {
+    //  host: "127.0.0.1",     // Localhost (default: none)
+    //  port: 8545,            // Standard Ethereum port (default: none)
+    //  network_id: "*",       // Any network (default: none)
+    // },
     // Another network with more advanced options...
     // advanced: {
     // port: 8777,             // Custom port
@@ -61,15 +70,14 @@ module.exports = {
     // },
     // Useful for deploying to a public network.
     // NB: It's important to wrap the provider as a function.
-     ropsten: {
-     provider: () => new HDWalletProvider(process.env.DEV_MNEMONIC, `https://ropsten.infura.io/v3/`+ infuraProjectId, 9, 10),
-     network_id: 3,       // Ropsten's id
-     gas: 5500000,        // Ropsten has a lower block limit than mainnet
-     confirmations: 2,    // # of confs to wait between deployments. (default: 0)
-     timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
-     from: "0x6Ec25fbba5865B3659d2b163Cb691407f5F6926B"
+    // ropsten: {
+    // provider: () => new HDWalletProvider(mnemonic, `https://ropsten.infura.io/v3/YOUR-PROJECT-ID`),
+    // network_id: 3,       // Ropsten's id
+    // gas: 5500000,        // Ropsten has a lower block limit than mainnet
+    // confirmations: 2,    // # of confs to wait between deployments. (default: 0)
+    // timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
     // skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
-     },
+    // },
     // Useful for private networks
     // private: {
     // provider: () => new HDWalletProvider(mnemonic, `https://network.io`),
@@ -86,7 +94,7 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-       version: "0.4.24",    // Fetch exact version from solc-bin (default: truffle's version)
+      // version: "0.5.1",    // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       // settings: {          // See the solidity docs for advice about optimization and evmVersion
       //  optimizer: {
@@ -98,3 +106,4 @@ module.exports = {
     },
   },
 };
+

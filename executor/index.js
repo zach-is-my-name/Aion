@@ -1,4 +1,3 @@
-require('dotenv').config();
 const Web3 = require('web3');
 const fs = require('fs');
 const mongoose = require('mongoose');
@@ -8,23 +7,24 @@ const {saveExecutedTxs} = require('./modules/saveExecutedTx');
 const {executeRequestedTxs} = require('./modules/executeRequestedTxs');
 const HDWalletProvider = require('truffle-hdwallet-provider');
 
-const dbHost = process.env.aionExecutor_dbHost
-const mnemonic =  process.env.aionExecutor_mnemonic
-const infuraId = process.env.aionExecutor_infuraId 
-const aionContractAddress = process.env.aionExecutor_aionContractAddress
-const privateKey = process.env.aionExecutor_privateKey
+let secureEnv = require('secure-env');
+global.env = secureEnv({secret:'GZgoalZappAion!'});
+
+const dbHost = global.env.aionExecutor_dbHost
+const mnemonic =  global.env.aionExecutor_mnemonic
+const aionContractAddress = global.env.aionExecutor_aionContractAddress
+const privateKey = global.env.aionExecutor_privateKey
 const reqConfirmations = 1
-// Connect tod atabase
+
+// Connect to database
 mongoose.connect(dbHost, {useNewUrlParser: true, useUnifiedTopology: true})
     .then( ()=> console.log('Connected to aion executor database'))
     .catch( (err) => console.error('Could not connect to database', error));
 
 
 // Inject Web3
-var provider = new HDWalletProvider(mnemonic, `https://ropsten.infura.io/v3/` + infuraId, 9, 10)
+var provider = new HDWalletProvider(teamsMnemonic, "https://sandbox.truffleteams.com/de77b065-c9a7-4c8b-9fe9-0e507a623f9a", 0, 10, false);
 var web3 = new Web3(provider);
-
-
 
 // Contract definition and account setting
 const ABI = JSON.parse(fs.readFileSync('Aion_ABI.json'));
