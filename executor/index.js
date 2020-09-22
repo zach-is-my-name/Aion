@@ -16,14 +16,16 @@ const aionContractAddress = global.env.aionExecutor_aionContractAddress
 const privateKey = global.env.aionExecutor_privateKey
 const reqConfirmations = 1
 
+console.log("aionContractAddress", aionContractAddress)
+console.log("privateKey", privateKey)
 // Connect to database
 mongoose.connect(dbHost, {useNewUrlParser: true, useUnifiedTopology: true})
-    .then( ()=> console.log('Connected to aion executor database'))
+    .then( ()=> console.log('Connected to aion executor database @@', dbHost))
     .catch( (err) => console.error('Could not connect to database', error));
 
 
 // Inject Web3
-var provider = new HDWalletProvider(teamsMnemonic, "https://sandbox.truffleteams.com/de77b065-c9a7-4c8b-9fe9-0e507a623f9a", 0, 10, false);
+var provider = new HDWalletProvider(teamsMnemonic, ""http://dockerhost:8545", 0, 10, false);
 var web3 = new Web3(provider);
 
 // Contract definition and account setting
