@@ -1,7 +1,7 @@
 #executer: node run index.js
 FROM node:alpine 
-COPY ./package.json .
+COPY ./executer/package.json ./executer/
 RUN apk add --no-cache bash
-RUN /bin/bash -c "npm install" 
 WORKDIR /executor
+RUN /bin/bash -c "npm install" 
 ENTRYPOINT ["node", "index.js"] 
