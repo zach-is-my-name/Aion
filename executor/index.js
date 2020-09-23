@@ -15,7 +15,7 @@ const mnemonic =  global.env.aionExecutor_mnemonic
 const aionContractAddress = global.env.aionExecutor_aionContractAddress
 const privateKey = global.env.aionExecutor_privateKey
 const reqConfirmations = 1
-
+const teamsMnemonic = global.env.aionExecutor_mnemonic 
 console.log("aionContractAddress", aionContractAddress)
 console.log("privateKey", privateKey)
 // Connect to database
