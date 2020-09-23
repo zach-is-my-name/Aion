@@ -5,7 +5,7 @@ const {Requests} = require('./models/Requests');
 const {saveRequestedTxs} = require('./modules/saveRequestedTx');
 const {saveExecutedTxs} = require('./modules/saveExecutedTx');
 const {executeRequestedTxs} = require('./modules/executeRequestedTxs');
-const HDWalletProvider = require('truffle-hdwallet-provider');
+const HDWalletProvider = require("@truffle/hdwallet-provider");
 
 let secureEnv = require('secure-env');
 global.env = secureEnv({secret:'GZgoalZappAion!'});
