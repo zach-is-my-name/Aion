@@ -21,7 +21,7 @@ console.log("privateKey", privateKey)
 // Connect to database
 mongoose.connect(dbHost, {useNewUrlParser: true, useUnifiedTopology: true})
     .then( ()=> console.log('Connected to aion executor database @@', dbHost))
-    .catch( (err) => console.error('Could not connect to database', error));
+    .catch( (err) => console.error('Could not connect to database', err));
 
 
 // Inject Web3
