@@ -25,7 +25,7 @@ mongoose.connect(dbHost, {useNewUrlParser: true, useUnifiedTopology: true})
 
 
 // Inject Web3
-var provider = new HDWalletProvider(teamsMnemonic, "http://ganache-cli:8545", 0, 10, false);
+var provider = new HDWalletProvider(teamsMnemonic, "https://ganache-cli:8545", 0, 10, false);
 var web3 = new Web3(provider);
 
 // Contract definition and account setting
