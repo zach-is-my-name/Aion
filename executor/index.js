@@ -32,7 +32,6 @@ var web3 = new Web3(provider);
 const ABI = JSON.parse(fs.readFileSync('Aion_ABI.json'));
 const aionContract = new web3.eth.Contract(ABI, aionContractAddress)
 const account = web3.eth.accounts.privateKeyToAccount(privateKey);
-const reqConfirmations = reqConfirmations;
 
 // Global variables
 var currentBlock = 0;
