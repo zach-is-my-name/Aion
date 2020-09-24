@@ -25,7 +25,7 @@ mongoose.connect(dbHost, {useNewUrlParser: true, useUnifiedTopology: true})
 
 
 // Inject Web3
-var provider = new HDWalletProvider({mnemonic: teamsMnemonic, providerOrUrl: "GANACHE:8545", addressIndex: 0, numberOfAddresses:10, shareNone:false});
+var provider = new HDWalletProvider({mnemonic: teamsMnemonic, providerOrUrl: "http://GANACHE:8545", addressIndex: 0, numberOfAddresses:10, shareNone:false});
 var web3 = new Web3(provider);
 
 // Contract definition and account setting
