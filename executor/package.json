@@ -15,7 +15,6 @@
     "web3": "^1.0.0-beta.55"
   },
   "devDependencies": {
-    "ganache-core": "^2.11.3",
     "secure-env": "^1.2.0"
   }
 }
