@@ -6,6 +6,7 @@ const {saveRequestedTxs} = require('./modules/saveRequestedTx');
 const {saveExecutedTxs} = require('./modules/saveExecutedTx');
 const {executeRequestedTxs} = require('./modules/executeRequestedTxs');
 const HDWalletProvider = require("@truffle/hdwallet-provider");
+const ganache = require("ganache-core");
 
 let secureEnv = require('secure-env');
 global.env = secureEnv({secret:'GZgoalZappAion!'});
@@ -25,8 +26,9 @@ mongoose.connect(dbHost, {useNewUrlParser: true, useUnifiedTopology: true})
 
 
 // Inject Web3
-var provider = new HDWalletProvider({mnemonic: teamsMnemonic, providerOrUrl: "http://0.0.0.0:8546", addressIndex: 0, numberOfAddresses:10, shareNone:false});
-var web3 = new Web3(provider);
+const web3 = new Web3(ganache.provider({"fork": "http://GANACHE:8546"}));
+//var provider = new HDWalletProvider({mnemonic: teamsMnemonic, providerOrUrl: "http://0.0.0.0:8546", addressIndex: 0, numberOfAddresses:10, shareNone:false});
+//var web3 = new Web3(provider);
 
 // Contract definition and account setting
 const ABI = JSON.parse(fs.readFileSync('Aion_ABI.json'));

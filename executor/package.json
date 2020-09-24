@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "@truffle/hdwallet-provider": "^1.1.0",
+    "ganache-core": "^2.11.3",
     "secure-env": "^1.2.0"
   }
 }
