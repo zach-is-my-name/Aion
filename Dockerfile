@@ -1,6 +1,6 @@
 #executer: node run index.js
 FROM node:alpine 
-RUN apk add --no-cache bash
+RUN apk add --no-cache bash && apk --update add gcc make g++ zlib-dev 
 COPY . .
 WORKDIR /executor
 #ENTRYPOINT ["/bin/bash"]

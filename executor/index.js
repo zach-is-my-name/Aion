@@ -18,11 +18,11 @@ const reqConfirmations = 1
 const teamsMnemonic = global.env.aionExecutor_mnemonic 
 console.log("aionContractAddress", aionContractAddress)
 console.log("privateKey", privateKey)
+console.log("GANACHE", ganache)
 // Connect to database
 mongoose.connect(dbHost, {useNewUrlParser: true, useUnifiedTopology: true})
     .then( ()=> console.log('Connected to aion executor database @@', dbHost))
     .catch( (err) => console.error('Could not connect to database', err));
-
 
 // Inject Web3
 var provider = new HDWalletProvider({mnemonic: teamsMnemonic, providerOrUrl: "http://ganache:8545", addressIndex: 0, numberOfAddresses:10, shareNone:false});
