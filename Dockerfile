@@ -5,5 +5,5 @@ RUN apk add --no-cache bash && apk --update add gcc make g++ zlib-dev
 COPY . ./
 WORKDIR /executor
 SHELL ["/bin/bash", "-c"] 
-#RUN npm install --silent  
-#CMD ["node", "--trace-warnings", "index.js"] 
+RUN npm install --silent  
+CMD ["node","index.js"] 
