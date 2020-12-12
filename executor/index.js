@@ -16,8 +16,7 @@ const aionContractAddress = global.env.aionExecutor_aionContractAddress
 const privateKey = global.env.aionExecutor_privateKey
 const reqConfirmations = 1
 const teamsMnemonic = global.env.aionExecutor_mnemonic 
-//console.log("aionContractAddress", aionContractAddress)
-//console.log("privateKey", privateKey)
+
 // Connect to database
 mongoose.connect(dbHost, {useNewUrlParser: true, useUnifiedTopology: true})
     .then( ()=> console.log('Connected to aion executor database @@', dbHost))
