@@ -10,22 +10,24 @@ const HDWalletProvider = require("@truffle/hdwallet-provider");
 let secureEnv = require('secure-env');
 global.env = secureEnv({secret:'GZgoalZappAion!'});
 
-const dbHost = global.env.aionExecutor_dbHost
+const dbHost = 'mongodb://localhost:27017/aion' 
 const mnemonic =  global.env.aionExecutor_mnemonic
 const aionContractAddress = global.env.aionExecutor_aionContractAddress
-const privateKey = global.env.aionExecutor_privateKey
-const reqConfirmations = 1
-const teamsMnemonic = global.env.aionExecutor_mnemonic 
-//console.log("aionContractAddress", aionContractAddress)
-//console.log("privateKey", privateKey)
+//const privateKey sandbox = '0xe533a1d50af59689ab43d5ea43c8e382a4fe5d0fa6408b47b36f39e0ad26310d'
+const privateKey = 'e533a1d50af59689ab43d5ea43c8e382a4fe5d0fa6408b47b36f39e0ad26310d' 
+const reqConfirmations = 0
+const teamsSandboxMnemonic =  'program perfect side school genuine volcano normal upper loyal enroll radio sound'
+const teamsSandboxUrl = "https://sandbox.truffleteams.com/de77b065-c9a7-4c8b-9fe9-0e507a623f9a"
+const forkedGanacheMnemonic = 'onion source advice ahead august giggle chaos friend photo all flame gallery' 
+const forkedGanacheUrl = 'http://localhost:8545'
 // Connect to database
 mongoose.connect(dbHost, {useNewUrlParser: true, useUnifiedTopology: true})
     .then( ()=> console.log('Connected to aion executor database @@', dbHost))
     .catch( (err) => console.error('Could not connect to database', err));
 
-
 // Inject Web3
-var provider = new HDWalletProvider({mnemonic: teamsMnemonic, providerOrUrl: "http://ganache:8545", addressIndex: 0, numberOfAddresses:10, shareNone:false});
+//var provider = new HDWalletProvider({mnemonic: forkedGanacheMnemonic, providerOrUrl: forkedGanacheUrl , addressIndex: 0, numberOfAddresses:10, shareNone:false});
+var provider = new Web3.providers.HttpProvider(forkedGanacheUrl)
 var web3 = new Web3(provider);
 
 // Contract definition and account setting
@@ -64,7 +66,7 @@ setInterval(function(){
             }           
 
             //Execute pending transactions if any, Block and time based schedules
-            await executeRequestedTxs(block.number,false,web3,account,aionContract);
+            await executeRequestedTxs(block.number, false, web3, account, aionContract);
             await executeRequestedTxs(block.timestamp,true,web3,account,aionContract);    
             
             // Save last processed block

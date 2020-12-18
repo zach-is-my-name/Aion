@@ -19,6 +19,7 @@ async function executeRequestedTxs(blockNumber,txType,web3,account,aionContract)
             var data = r[i].data;
             var AionID = r[i].AionID;
             var schedType = r[i].schedType;
+            console.log({block: web3.utils.hexToNumber(block), from, to, value: web3.utils.hexToNumber(value), gaslimit: web3.utils.hexToNumber(gaslimit), gasprice: web3.utils.hexToNumber(gasprice), fee: web3.utils.hexToNumber(fee), data, AionID: web3.utils.hexToNumber(AionID), schedType}) /* debug */
 
             await aionContract.methods.executeCall(block,from,to,value,gaslimit,gasprice,fee,data,AionID,schedType).estimateGas({
                 from: account.address,

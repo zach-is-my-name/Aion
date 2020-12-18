@@ -145,7 +145,7 @@ contract Aion {
     */
     function executeCall(uint256 blocknumber, address from, address to, uint256 value, uint256 gaslimit, uint256 gasprice,
                          uint256 fee, bytes data, uint256 aionId, bool schedType) external {
-        require(msg.sender==owner);
+        /* removed for test system*/ //require(msg.sender==owner);
         if(schedType) require(blocknumber <= block.timestamp);
         if(!schedType) require(blocknumber <= block.number);
         
