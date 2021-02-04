@@ -8,7 +8,7 @@ async function saveExecutedTxs(event,web3){
     if(result!=req[0]){
         console.log('Error saving executed Tx')
     }else{
-        console.log(`Requested Tx with ID ${data.AionID} Executed`);               
+        console.log(`Requested Tx with AionID ${data.AionID} Executed`);               
     }
 }
 

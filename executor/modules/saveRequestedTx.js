@@ -21,7 +21,7 @@ async function saveRequestedTxs(event,web3){
             'txHash': ''
         });
         await request.save()
-        .catch((error) => {console.log('error saving request')});
+        .catch((error) => {console.log('error saving request', error)});
     }
 }
 

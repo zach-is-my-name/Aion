@@ -1,3 +1,17 @@
+const http = require('http');
+const Web3HttpProvider = require('web3-providers-http');
+
+var options = {
+    keepAlive: true,
+    withCredentials: false,
+    timeout: 20000, // ms
+    headers: [
+        {
+            name: 'Access-Control-Allow-Origin',
+            value: '*'
+        }
+    ]    }
+
 const Web3 = require('web3');
 const fs = require('fs');
 const mongoose = require('mongoose');
@@ -12,22 +26,23 @@ global.env = secureEnv({secret:'GZgoalZappAion!'});
 
 const dbHost = 'mongodb://localhost:27017/aion' 
 const mnemonic =  global.env.aionExecutor_mnemonic
-const aionContractAddress = global.env.aionExecutor_aionContractAddress
+const aionContractAddress = '0x4C26ed597F71eb658741AaFc982ecbd2e8B003Fb'
 //const privateKey sandbox = '0xe533a1d50af59689ab43d5ea43c8e382a4fe5d0fa6408b47b36f39e0ad26310d'
-const privateKey = 'e533a1d50af59689ab43d5ea43c8e382a4fe5d0fa6408b47b36f39e0ad26310d' 
+const privateKey = '0x61fa5d860372d5673644b41380642b9bd44d01e52c79852d2f90552cace94b8b' 
 const reqConfirmations = 0
-const teamsSandboxMnemonic =  'program perfect side school genuine volcano normal upper loyal enroll radio sound'
-const teamsSandboxUrl = "https://sandbox.truffleteams.com/de77b065-c9a7-4c8b-9fe9-0e507a623f9a"
-const forkedGanacheMnemonic = 'onion source advice ahead august giggle chaos friend photo all flame gallery' 
-const forkedGanacheUrl = 'http://localhost:8545'
+//const teamsSandboxMnemonic =  'program perfect side school genuine volcano normal upper loyal enroll radio sound'
+//const teamsSandboxUrl = "https://sandbox.truffleteams.com/de77b065-c9a7-4c8b-9fe9-0e507a623f9a"
+//const forkedGanacheMnemonic = 'onion source advice ahead august giggle chaos friend photo all flame gallery' 
+const forkedGanacheUrl = 'http://127.0.0.1:8545'
 // Connect to database
 mongoose.connect(dbHost, {useNewUrlParser: true, useUnifiedTopology: true})
     .then( ()=> console.log('Connected to aion executor database @@', dbHost))
-    .catch( (err) => console.error('Could not connect to database', err));
+    .catch( (err) => console.log('Could not connect to database', err));
 
 // Inject Web3
 //var provider = new HDWalletProvider({mnemonic: forkedGanacheMnemonic, providerOrUrl: forkedGanacheUrl , addressIndex: 0, numberOfAddresses:10, shareNone:false});
-var provider = new Web3.providers.HttpProvider(forkedGanacheUrl)
+
+const provider = new Web3HttpProvider('http://localhost:8545', options);
 var web3 = new Web3(provider);
 
 // Contract definition and account setting
@@ -40,37 +55,52 @@ var currentBlock = 0;
 web3.eth.getBlockNumber()
     .then((number)=>{
         currentBlock = number;
-        console.log(currentBlock);
+        console.log('New Aion start block ', currentBlock);
     });
 
 setInterval(function(){
     web3.eth.getBlock('latest', async (err,block)=>{
         if(err){
-            console.error(err);          
+            console.log(err);          
             return;
         }
-        if(currentBlock<=block.number){
-            console.log(`New block received, Number: ${block.number}`);            
+        //if currentBlockProcessed <= blockchainBlock { then process}    
+        // block.number is where blockchain actually is
+        // currentBlock is where this system is
+    //console.log(`chain ${block.number} is >= Aion block ${currentBlock} ? ${block.number >= currentBlock}`)
+    console.log(`Aion ${currentBlock} chain ${block.number}`)
+        if(currentBlock <= block.number){
+            console.log(`New chain block received: aion: ${currentBlock}, chain: ${block.number}`);            
             
-            // Get scheduleCallEvent events adn save
-            var events = await aionContract.getPastEvents('ScheduleCallEvent', {fromBlock: currentBlock-reqConfirmations,toBlock: block.number-reqConfirmations}) 
-            for(var i = 0; i<events.length; i++){
-                console.log('Registering new request to the database...');
-                await saveRequestedTxs(events[i],web3);
+            /** Get scheduleCallEvent events and save **/
+            console.log(`Looking for Scheduled Transaction events from Aion block ${currentBlock} to chain block ${block.number}`)
+            var events = await aionContract.getPastEvents('ScheduleCallEvent', {fromBlock: currentBlock-reqConfirmations, toBlock: block.number-reqConfirmations}) 
+            for(var i = 0; i < events.length; i++){
+                console.log(`Found new Scheduled Transaction from chain block ${web3.utils.hexToNumber(events[i].blockNumber)}, to be executed at ${web3.utils.hexToNumber(events[i].returnValues.blocknumber)}`);
+                await saveRequestedTxs(events[i], web3);
+                //console.log(`Registered scheduled tx to database`)
             }                                     
-            
+           /**               end                         **/
+
+           /**      look for past executed events        **/
+            //console.log(`Looking for past Executed events from Aion block ${currentBlock} to chain block ${block.number}`)
             var events = await aionContract.getPastEvents('ExecutedCallEvent', {fromBlock: currentBlock-reqConfirmations,toBlock: block.number-reqConfirmations})
-            for(var i = 0; i<events.length; i++){
+           
+            //if (events.length < 1) {console.log("no past executed events")} 
+               
+            for(var i = 0; i < events.length; i++){
                 console.log('Registering successfully executed Tx...');
                 await saveExecutedTxs(events[i],web3);
             }           
+           /**               end                         **/
 
             //Execute pending transactions if any, Block and time based schedules
             await executeRequestedTxs(block.number, false, web3, account, aionContract);
-            await executeRequestedTxs(block.timestamp,true,web3,account,aionContract);    
+            await executeRequestedTxs(/*current blockchain timeStamp*/ block.timestamp, true, web3, account, aionContract);    
             
             // Save last processed block
             currentBlock = block.number+1;
+        //    console.log(`advance Aion block to ${currentBlock}`) 
         }
     })
 },4000);
