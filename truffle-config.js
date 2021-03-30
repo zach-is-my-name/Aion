@@ -1,8 +1,8 @@
-require('dotenv').config()
+/*require('dotenv').config()
 const HDWalletProvider = require('truffle-hdwallet-provider');
 const infuraProjectId = process.env.INFURA_PROJECT_ID;
 const teamsMnemonic = "program perfect side school genuine volcano normal upper loyal enroll radio sound";
-
+*/
 
 /**
  * Use this file to configure your truffle project. It's seeded with some
@@ -47,12 +47,14 @@ module.exports = {
     // You should run a client (like ganache-cli, geth or parity) in a separate terminal
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
     // options below to some value.
+		/*
     teams: {
       provider: function() {
         return new HDWalletProvider(teamsMnemonic, "https://sandbox.truffleteams.com/de77b065-c9a7-4c8b-9fe9-0e507a623f9a", 0, 10, false);
       },
       network_id: 1600456372095
     },
+		*/
     //
     // development: {
     //  host: "127.0.0.1",     // Localhost (default: none)
