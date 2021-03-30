@@ -1,4 +1,7 @@
-pragma solidity ^0.4.24; 
+pragma solidity ^0.5.0; 
+
+import "./GoalEscrowTestVersion.sol"; /*debug*/
+import "./SafeMath.sol";
 
 /* ----------------------------------------------------------------------------
  Client contract.
@@ -15,48 +18,13 @@ contract AionClient {
     }
 
     
-    function execfunct(address to, uint256 value, uint256 gaslimit, bytes data) external returns(bool) {
-        require(msg.sender == AionAddress);
-        return to.call.value(value).gas(gaslimit)(data);
-
+    function execfunct(address to, uint256 value, uint256 gaslimit, bytes calldata data) external returns(bool, bytes memory) {
+        require(msg.sender == AionAddress, "msg.send !== AionAddress");
+        return (address(to).call.value(value).gas(gaslimit)(data));
     }
     
 
-    function () payable public {}
-
-}
-
-
-// ----------------------------------------------------------------------------
-// SafeMat library
-// ----------------------------------------------------------------------------
-library SafeMath {
-  /** @dev Multiplies two numbers, throws on overflow.*/
-    function mul(uint256 a, uint256 b) internal pure returns (uint256) {
-        if (a == 0) {return 0;}
-        uint256 c = a * b;
-        require(c / a == b);
-        return c;
-    }
-
-  /** @dev Integer division of two numbers, truncating the quotient.*/
-    function div(uint256 a, uint256 b) internal pure returns (uint256) {
-        uint256 c = a / b;
-        return c;
-    }
-
-  /**@dev Substracts two numbers, throws on overflow (i.e. if subtrahend is greater than minuend).*/
-    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
-        require(b <= a);
-        return a - b;
-    }
-
-  /** @dev Adds two numbers, throws on overflow.*/
-    function add(uint256 a, uint256 b) internal pure returns (uint256) {
-        uint256 c = a + b;
-        require(c >= a);
-        return c;
-    }
+    function () payable external {}
 
 }
 
@@ -69,11 +37,11 @@ library SafeMath {
 contract Aion {
     using SafeMath for uint256;
 
-    address public owner;
+    address payable public owner;
     uint256 public serviceFee;
     uint256 public AionID;
     uint256 public feeChangeInterval;
-    mapping(address => address) public clientAccount;
+    mapping(address => address payable) public clientAccount;
     mapping(uint256 => bytes32) public scheduledCalls;
 
     // Log for executed transactions.
@@ -99,8 +67,8 @@ contract Aion {
     }    
 
     // This function allows to change the address of the owner (admin of the contract)
-    function transferOwnership(address newOwner) public {
-        require(msg.sender == owner);
+    function transferOwnership(address payable newOwner) public {
+        require(msg.sender == owner, "msg.sender !== owner");
         withdraw();
         owner = newOwner;
     }
@@ -127,8 +95,8 @@ contract Aion {
     @return uint256 Identification of the transaction
     @return address address of the client account created
     */
-    function ScheduleCall(uint256 blocknumber, address to, uint256 value, uint256 gaslimit, uint256 gasprice, bytes data, bool schedType) public payable returns (uint,address){
-        require(msg.value == value.add(gaslimit.mul(gasprice)).add(serviceFee));
+    function ScheduleCall(uint256 blocknumber, address to, uint256 value, uint256 gaslimit, uint256 gasprice, bytes memory data, bool schedType) public payable returns (uint,address){
+        require(msg.value == value.add(gaslimit.mul(gasprice)).add(serviceFee), "msg.value must == value.add(gaslimit.mul(gasprice)).add(serviceFee)");
         AionID = AionID + 1;
         scheduledCalls[AionID] = keccak256(abi.encodePacked(blocknumber, msg.sender, to, value, gaslimit, gasprice, serviceFee, data, schedType));
         createAccount();
@@ -144,23 +112,25 @@ contract Aion {
     If the information does not match, the transaction is reverted.
     */
     function executeCall(uint256 blocknumber, address from, address to, uint256 value, uint256 gaslimit, uint256 gasprice,
-                         uint256 fee, bytes data, uint256 aionId, bool schedType) external {
-        require(msg.sender==owner);
-        if(schedType) require(blocknumber <= block.timestamp);
-        if(!schedType) require(blocknumber <= block.number);
+                         uint256 fee, bytes calldata data, uint256 aionId, bool schedType) external {
+        /* removed for truffle teams sandbox test version */ //require(msg.sender==owner);
+        if(schedType) require(blocknumber <= block.timestamp );
+        if(!schedType) require(blocknumber <= block.number );
         
         require(scheduledCalls[aionId]==keccak256(abi.encodePacked(blocknumber, from, to, value, gaslimit, gasprice, fee, data, schedType)));
-        AionClient instance = AionClient(clientAccount[from]);
+        AionClient instance = AionClient(address(clientAccount[from]));
         
-        require(instance.execfunct(address(this), gasprice*gaslimit+fee, 2100, hex"00"));
-        bool TxStatus = instance.execfunct(to, value, gasleft().sub(50000), data);
+        (bool success, ) = instance.execfunct(address(this), gasprice*gaslimit+fee, 2100, hex"00");
+        require(success);
+        (bool TxStatus, ) = instance.execfunct(to, value, gasleft().sub(50000), data);
         
         // If the user tx fails return the ether to user
         bool TxStatus_cancel;
-        if(!TxStatus && value>0){TxStatus_cancel = instance.execfunct(from, value, 2100, hex"00");}
+        if(!TxStatus && value > 0){(TxStatus_cancel, ) = instance.execfunct(from, value, 2100, hex"00");} else { TxStatus_cancel = false;}
         
         delete scheduledCalls[aionId];
-        bool reimbStatus = from.call.value((gasleft()).mul(gasprice)).gas(2100)();
+        (bool reimbStatus, ) = from.call.value((gasleft()).mul(gasprice)).gas(2100)("");
+        //emit TimeCalled(scheduledBlocktime, blockTimeNow);
         emit ExecutedCallEvent(from, aionId,TxStatus, TxStatus_cancel, reimbStatus);
         
     }
@@ -171,14 +141,14 @@ contract Aion {
     @return bool indicating success or failure.
     */
     function cancellScheduledTx(uint256 blocknumber, address from, address to, uint256 value, uint256 gaslimit, uint256 gasprice,
-                         uint256 fee, bytes data, uint256 aionId, bool schedType) external returns(bool) {
+                         uint256 fee, bytes calldata data, uint256 aionId, bool schedType) external returns(bool) {
         if(schedType) require(blocknumber >=  block.timestamp+(3 minutes) || blocknumber <= block.timestamp-(5 minutes));
         if(!schedType) require(blocknumber >  block.number+10 || blocknumber <= block.number-20);
         require(scheduledCalls[aionId]==keccak256(abi.encodePacked(blocknumber, from, to, value, gaslimit, gasprice, fee, data, schedType)));
         require(msg.sender==from);
         AionClient instance = AionClient(clientAccount[msg.sender]);
         
-        bool Status = instance.execfunct(from, value+gasprice*gaslimit+fee, 3000, hex"00");
+        (bool Status, ) = instance.execfunct(from, value+gasprice*gaslimit+fee, 3000, hex"00");
         require(Status);
         emit CancellScheduledTxEvent(from, value+gasprice*gaslimit+fee, Status, aionId);
         delete scheduledCalls[aionId];
@@ -217,7 +187,7 @@ contract Aion {
 
     
     // fallback- receive Ether
-    function () public payable {
+    function () external payable {
     
     }
 
