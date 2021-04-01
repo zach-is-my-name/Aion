@@ -8,7 +8,7 @@ const {executeRequestedTxs} = require('./modules/executeRequestedTxs');
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
 let secureEnv = require('secure-env');
-global.env = secureEnv({secret:'GZgoalZappAion!'});
+global.env = secureEnv({secret:''});
 
 const dbHost = global.env.aionExecutor_dbHost
 const mnemonic =  global.env.aionExecutor_mnemonic
