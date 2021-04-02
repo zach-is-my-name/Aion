@@ -1,8 +1,3 @@
-/*require('dotenv').config()
-const HDWalletProvider = require('truffle-hdwallet-provider');
-const infuraProjectId = process.env.INFURA_PROJECT_ID;
-const teamsMnemonic = "program perfect side school genuine volcano normal upper loyal enroll radio sound";
-*/
 
 /**
  * Use this file to configure your truffle project. It's seeded with some
