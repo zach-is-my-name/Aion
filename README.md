@@ -4,7 +4,6 @@ A system for Scheduling transactions with arbitrary bytecode on the Ethereum Net
 Given the structure of Ethereum, it is not possible to schedule calls to contracts at a point in the future. This is because smart contracts cannot subscribe to events and therefore all the actions need to be triggered by an entity external to the contract. In many applications, one may be interested in scheduling an operation (transaction, execution of a particular function) in the future.
 
 Aion is a smart contract-based system that solves this problem. With Aion, transactions of any type (ether transactions, tokens transfers, contract's function executions, contracts deployments, and in general any bytecode instruction) can be scheduled to be executed at a particular time or block in the future.
-
 For further information about how Aion works go to [Aion's Home Page](https://www.aion.ethpantheon.com/index.html#howitworks)<br>
 For scheduling transactions through Aion's graphical interface go to [Aion's App](https://www.aion.ethpantheon.com/aionapp.html)
 <br>
