@@ -4,3 +4,4 @@ node_modules
 pw
 build
 executor/.env
+executor/node_modules
