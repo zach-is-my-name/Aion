@@ -1,3 +1,4 @@
+require('dotenv').config()
 const Web3 = require('web3');
 const fs = require('fs');
 const mongoose = require('mongoose');
@@ -7,12 +8,11 @@ const {saveExecutedTxs} = require('./modules/saveExecutedTx');
 const {executeRequestedTxs} = require('./modules/executeRequestedTxs');
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
-const dbHost = global.env.aionExecutor_dbHost
-const mnemonic =  global.env.aionExecutor_mnemonic
-const aionContractAddress = global.env.aionExecutor_aionContractAddress
-const privateKey = global.env.aionExecutor_privateKey
+const dbHost = process.env.DB_HOST
+const aionContractAddress = process.env.AION_CONTRACT_ADDRESS
+const privateKey = process.env.PK
+const providerOrUrl = process.env.PROVIDER
 const reqConfirmations = 1
-const teamsMnemonic = global.env.aionExecutor_mnemonic 
 
 // Connect to database
 mongoose.connect(dbHost, {useNewUrlParser: true, useUnifiedTopology: true})
@@ -20,7 +20,7 @@ mongoose.connect(dbHost, {useNewUrlParser: true, useUnifiedTopology: true})
     .catch( (err) => console.error('Could not connect to database', err));
 
 // Inject Web3
-var provider = new HDWalletProvider({mnemonic: teamsMnemonic, providerOrUrl: "http://ganache:8545", addressIndex: 0, numberOfAddresses:10, shareNone:false});
+var provider = new HDWalletProvider({privateKeys:[privateKey], providerOrUrl});
 var web3 = new Web3(provider);
 
 // Contract definition and account setting
