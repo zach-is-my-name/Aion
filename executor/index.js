@@ -22,13 +22,12 @@ const {executeRequestedTxs} = require('./modules/executeRequestedTxs');
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
 let secureEnv = require('secure-env');
-global.env = secureEnv({secret:'GZgoalZappAion!'});
+global.env = secureEnv({secret:''});
 
 const dbHost = 'mongodb://localhost:27017/aion' 
 const mnemonic =  global.env.aionExecutor_mnemonic
 const aionContractAddress = '0x4C26ed597F71eb658741AaFc982ecbd2e8B003Fb'
-//const privateKey sandbox = '0xe533a1d50af59689ab43d5ea43c8e382a4fe5d0fa6408b47b36f39e0ad26310d'
-const privateKey = '0x61fa5d860372d5673644b41380642b9bd44d01e52c79852d2f90552cace94b8b' 
+const privateKey = '' 
 const reqConfirmations = 0
 //const teamsSandboxMnemonic =  'program perfect side school genuine volcano normal upper loyal enroll radio sound'
 //const teamsSandboxUrl = "https://sandbox.truffleteams.com/de77b065-c9a7-4c8b-9fe9-0e507a623f9a"
