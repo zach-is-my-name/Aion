@@ -8,7 +8,7 @@ const {saveExecutedTxs} = require('./modules/saveExecutedTx');
 const {executeRequestedTxs} = require('./modules/executeRequestedTxs');
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
-const dbHost = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}`
+const dbHost = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/aion`
 const aionContractAddress = process.env.AION_CONTRACT_ADDRESS
 const privateKey = process.env.PK
 const providerOrUrl = process.env.PROVIDER
